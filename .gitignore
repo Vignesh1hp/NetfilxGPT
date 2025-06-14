@@ -19,6 +19,9 @@ dist-ssr
 .env.*.local
 *.local
 
+# Ignore constants.js containing secrets
+src/utils/constants.js
+
 # Firebase
 .firebase/
 firebase-debug.log
