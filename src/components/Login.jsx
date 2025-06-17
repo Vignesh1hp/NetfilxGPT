@@ -43,7 +43,7 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
-        
+
           updateProfile(user, {
             displayName: name.current.value,
             photoURL: USER_AVATAR,
@@ -60,7 +60,6 @@ const Login = () => {
                   photoURL: photoURL,
                 })
               );
-              
             })
             .catch((error) => {
               // An error occurred
@@ -100,10 +99,7 @@ const Login = () => {
     <div>
       <Header />
       <div className="absolute">
-        <img
-          src={BG_IMG}
-          alt="logo"
-        />
+        <img src={BG_IMG} alt="logo" />
       </div>
       <form
         onSubmit={(e) => {
@@ -139,7 +135,7 @@ const Login = () => {
           {errorMessage}
         </p>
         <button
-          className="p-4 my-6 bg-red-700 w-full rounded-lg"
+          className="p-4 my-6 bg-red-700 w-full rounded-lg cursor-pointer"
           onClick={handleSubmit}
         >
           {isSignInForm ? "Sign In" : "Sign Up"}
