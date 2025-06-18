@@ -13,44 +13,32 @@ import { BG_IMG, USER_AVATAR } from "../utils/constant";
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
-
-  const [errorMessage, setErrorMessage] = useState("");
-
+  const [errorMessage, setErrorMessage] = useState(null);
   const dispatch = useDispatch();
 
-  const toggleSignInForm = () => {
-    setIsSignInForm(!isSignInForm);
-  };
-  // useRef for referencing the input data from FORM...
+  const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
-  const name = useRef(null);
 
-  // signIn/Up button click logic
-  const handleSubmit = () => {
-    // data validation using utils called validate.js
+  const handleButtonClick = () => {
     const message = validateData(email.current.value, password.current.value);
-    // console.log(message);
-    setErrorMessage(message); //error messaging displaying using a useState
-    if (message) return; //if the msg contains a string it means it's not valid so returning here.
+    setErrorMessage(message);
+    if (message) return;
+
     if (!isSignInForm) {
-      //sign up form
+      // Sign Up Logic
       createUserWithEmailAndPassword(
         auth,
         email.current.value,
         password.current.value
       )
         .then((userCredential) => {
-          // Signed up
           const user = userCredential.user;
-
           updateProfile(user, {
             displayName: name.current.value,
             photoURL: USER_AVATAR,
           })
             .then(() => {
-              // Profile updated!
-              // ...
               const { uid, email, displayName, photoURL } = auth.currentUser;
               dispatch(
                 addUser({
@@ -62,21 +50,16 @@ const Login = () => {
               );
             })
             .catch((error) => {
-              // An error occurred
-              // ...
               setErrorMessage(error.message);
             });
-          // navigate("/browse");
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorMessage(errorCode + " " + errorMessage);
-          // ..
+          setErrorMessage(errorCode + "-" + errorMessage);
         });
     } else {
-      //sign in form
+      // Sign In Logic
       signInWithEmailAndPassword(
         auth,
         email.current.value,
@@ -85,27 +68,27 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          // console.log(user);
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          setErrorMessage(errorCode + " " + errorMessage);
+          setErrorMessage(errorCode + "-" + errorMessage);
         });
     }
+  };
+
+  const toggleSignInForm = () => {
+    setIsSignInForm(!isSignInForm);
   };
   return (
     <div>
       <Header />
       <div className="absolute">
-        <img src={BG_IMG} alt="logo" />
+        <img className="object-cover" src={BG_IMG} alt="logo" />
       </div>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-        className="w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80"
+        onSubmit={(e) => e.preventDefault()}
+        className="w-full md:w-3/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80"
       >
         <h1 className="font-bold text-3xl py-4">
           {isSignInForm ? "Sign In" : "Sign Up"}
@@ -131,12 +114,10 @@ const Login = () => {
           placeholder="Password"
           className="p-4 my-4 w-full bg-gray-700"
         />
-        <p className="text-red-600 text-lg font-bold text-center py-5">
-          {errorMessage}
-        </p>
+        <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
         <button
-          className="p-4 my-6 bg-red-700 w-full rounded-lg cursor-pointer"
-          onClick={handleSubmit}
+          className="p-4 my-6 bg-red-700 w-full rounded-lg"
+          onClick={handleButtonClick}
         >
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>

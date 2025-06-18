@@ -1,11 +1,13 @@
 import { useSelector } from "react-redux";
-import useVideoTrailer from "../hooks/useVideoTrailer";
+import useMovieTrailer from "../hooks/useVideoTrailer";
 
 const VideoBackground = ({ movieId }) => {
   const trailerVideo = useSelector((store) => store.movies?.trailerVideo);
-  useVideoTrailer(movieId);
+
+  useMovieTrailer(movieId);
+
   return (
-    <div className="w-screen">
+    <div className=" w-screen">
       <iframe
         className="w-screen aspect-video"
         src={
@@ -15,11 +17,8 @@ const VideoBackground = ({ movieId }) => {
         }
         title="YouTube video player"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
       ></iframe>
     </div>
   );
 };
-
 export default VideoBackground;
