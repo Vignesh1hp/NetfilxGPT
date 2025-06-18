@@ -11,6 +11,7 @@ import { changeLanguage } from "../utils/configSlice";
 
 const Header = () => {
   const user = useSelector((store) => store.user);
+  const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // signout Logic below...
@@ -65,21 +66,23 @@ const Header = () => {
       {/* if only user exist render the user icon and sign out button */}
       {user && (
         <div className="flex items-center p-2">
-          <select
-            onChange={(e) => handleLanguageChange(e)}
-            className="p-2 m-2 bg-gray-900 text-white"
-          >
-            {SUPPORTED_LANGUAGES.map((lang) => (
-              <option key={lang.identifier} value={lang.identifier}>
-                {lang.name}
-              </option>
-            ))}
-          </select>
+          {showGptSearch && (
+            <select
+              onChange={(e) => handleLanguageChange(e)}
+              className="p-2 m-2 bg-gray-900 text-white"
+            >
+              {SUPPORTED_LANGUAGES.map((lang) => (
+                <option key={lang.identifier} value={lang.identifier}>
+                  {lang.name}
+                </option>
+              ))}
+            </select>
+          )}
           <button
             onClick={handleGptSearchClick}
             className="py-2 px-4 my-2 mx-4 bg-purple-600 text-white rounded-lg hover:bg-purple-400"
           >
-            GPT Search
+            {showGptSearch ? "HomePage" : "GPT Search"}
           </button>
           <img className="w-9 h-9 mr-1" src={user?.photoURL} alt="user icon" />
           <button
